@@ -6,11 +6,11 @@
 inline
 size_t Array::size (void) const
 {
-  return 0;
+  return cur_size_;
 }
 
 inline
 size_t Array::max_size (void) const
 {
-  return 0;
+  return max_size_;
 }
