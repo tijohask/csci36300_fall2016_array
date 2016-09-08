@@ -3,7 +3,7 @@ project (Array) {
 
 	Source_Files {
 		Array.cpp
-		Driver.cpp
+		driver.cpp
 	}
 
 	Header_Files {

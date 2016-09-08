@@ -9,25 +9,45 @@
 #include <stdexcept>
 using namespace std;
 
-//Q1: can size_t be incremented in a for loop?
+/**
+ * @class Array
+ *
+ * Basic implementation of a standard array class for chars.
+ */
 
-
+/// Default constructor.
 Array::Array (): data_(NULL), cur_size_(0), max_size_(0)
 {
-	data_ = new char[0];
+//	data_ = new char[0];
 }
 
+/**
+ * Initializing constructor.
+ *
+ * @param[in]      length        Initial size
+ */
 Array::Array (size_t length): data_(NULL), cur_size_(0), max_size_(length)
 {
 	data_ = new char[length];
 }
 
+/**
+ * Initializing constructor.
+ *
+ * @param[in]      length        Initial size
+ * @param[in]      fill          Initial value for each element
+ */
 Array::Array (size_t length, char fill): data_(NULL), cur_size_(length), max_size_ (length)
 {
 	data_ = new char[length];
 	this->fill(fill);
 }
 
+/**
+ * Copy constructor
+ *
+ * @param[in]     arr         The source array.
+ */
 Array::Array (const Array & array): data_(NULL), cur_size_(array.size()), max_size_(array.max_size())
 {
 	data_ = new char[max_size_];
@@ -38,14 +58,21 @@ Array::Array (const Array & array): data_(NULL), cur_size_(array.size()), max_si
 }
 
 //All constructors appear to be working
-
+/// Destructor
 Array::~Array (void)
 {
 	delete [] data_;
 }
 
+/**
+ * Assignment operation
+ *
+ * @param[in]       rhs      Right-hand side of equal sign
+ * @return          Reference to self
+ */
 const Array & Array::operator = (const Array & rhs)
 {
+	delete [] data_;
 	data_ = new char[rhs.max_size()];
 	cur_size_ = rhs.size();
 	max_size_ = rhs.max_size();
@@ -55,6 +82,14 @@ const Array & Array::operator = (const Array & rhs)
 	}
 }
 
+/**
+ * Get the character at the specified index. If the index is not
+ * within the range of the array, then std::out_of_range exception
+ * is thrown.
+ *
+ * @param[in]       index               Zero-based location
+ * @exception       std::out_of_range   Invalid \a index value
+ */
 char & Array::operator [] (size_t index)
 {
 	if(index > max_size_)
@@ -62,8 +97,13 @@ char & Array::operator [] (size_t index)
 		throw std::out_of_range ("Index out of range");
 	}
 	return data_[index];
-}//tested; working
+}
 
+/**
+ * @overload
+ *
+ * The returned character is not modifiable.
+ */
 const char & Array::operator [] (size_t index) const
 {
 	if(index > max_size_)
@@ -71,8 +111,16 @@ const char & Array::operator [] (size_t index) const
 		throw std::out_of_range ("Index out of range");
 	}
 	return data_[index];
-}//tested, working
+}
 
+/**
+ * Get the character at the specified index. If the \a index is not within
+ * the range of the array, then std::out_of_range exception is thrown.
+ *
+ * @param[in]       index                 Zero-based location
+ * @return          Character at \index
+ * @exception       std::out_of_range     Invalid index value
+ */  
 char Array::get (size_t index) const
 {
 	if(index > max_size_)
@@ -80,8 +128,17 @@ char Array::get (size_t index) const
 		throw std::out_of_range ("Index out of range");
 	}	
 	return data_[index];
-}//tested; working
+}
 
+/** 
+ * Set the character at the specified \a index. If the \a index is not
+ * within range of the array, then std::out_of_range exception is 
+ * thrown.
+ *
+ * @param[in]       index                 Zero-based location
+ * @param[in]       value                 New value for character
+ * @exception       std::out_of_range     Invalid \a index value
+ */
 void Array::set (size_t index, char value)
 {
 	if(index > max_size_)
@@ -96,8 +153,20 @@ void Array::set (size_t index, char value)
 			cur_size_ = index;
 		}
 	}
-}//tested, working
+}
 
+/**
+ * Set a new size for the array. If \a new_size is less than the current
+ * size, then the array is truncated. If \a new_size if greater then the
+ * current size, then the array is made larger and the new elements are
+ * not initialized to anything. If \a new_size is the same as the current
+ * size, then nothing happens.
+ *
+ * The array's original contents are preserved regardless of whether the 
+ * array's size is either increased or decreased.
+ *
+ * @param[in]       new_size              New size of the array
+ */
 void Array::resize (size_t new_size)
 {
 	if(max_size_ < new_size)
@@ -128,8 +197,17 @@ void Array::resize (size_t new_size)
 	{
 		return;
 	}
-}//tested; working
+}
 
+/**
+ * Locate the specified character in the array. The index of the first
+ * occurrence of the character is returned. If the character is not
+ * found in the array, then -1 is returned.
+ *
+ * @param[in]        ch        Character to search for
+ * @return           Index value of the character
+ * @retval           -1        Character not found
+ */
 int Array::find (char ch) const
 {
 	int current = static_cast<int>(cur_size_);
@@ -141,8 +219,21 @@ int Array::find (char ch) const
 		}
 	}
 	return -1;
-}//tested; working
+}
 
+/**
+ * @overload
+ *
+ * This version allows you to specify the start index of the search. If
+ * the start index is not within the range of the array, then the
+ * std::out_of_range exception is thrown.
+ *
+ * @param[in]       ch                   Character to search for
+ * @param[in]       start                Index to begin search
+ * @return          Index value of first occurrence
+ * @retval          -1                   Character not found
+ * @exception       std::out_of_range    Invalid index
+ */
 int Array::find (char ch, size_t start) const
 {
 	int current = static_cast<int>(cur_size_);
@@ -154,8 +245,15 @@ int Array::find (char ch, size_t start) const
 		}
 	}
 	return -1;
-}//tested; working
+}
 
+/**
+ * Test the array for equality.
+ *
+ * @param[in]       rhs                  Right hand side of equal to sign
+ * @retval          true                 Left side is equal to right side
+ * @retval          false                Left side is not equal to right side
+ */
 bool Array::operator == (const Array & rhs) const
 {
 	//if the arrays have different sizes, they are not equal
@@ -178,6 +276,13 @@ bool Array::operator == (const Array & rhs) const
 	return true;
 }
 
+/**
+ * Test the array for inequality.
+ *
+ * @param[in]       rhs                  Right-hand size of not equal to sign
+ * @retval          true                 Left side is not equal to right side
+ * @retval          false                Left size is equal to right side
+ */
 bool Array::operator != (const Array & rhs) const
 {
 	//if the arrays have different sizes, they are not equal	
@@ -200,11 +305,12 @@ bool Array::operator != (const Array & rhs) const
 	return false;
 }
 
-//bool Array::checkRange(size_t index)
-//{
 
-//}
-
+/**
+ * Fill the contents of the array.
+ *
+ * @param[in]       ch                   Fill character
+ */
 void Array::fill (char ch)
 {
 	//iterate through every character in the array...
@@ -214,4 +320,4 @@ void Array::fill (char ch)
 		data_[i] = ch;
 	}
 	cur_size_ = max_size_;
-}//tested; working
+}
