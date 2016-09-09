@@ -179,7 +179,6 @@ void Array::resize (size_t new_size)
 			data_[i] = hold[i];
 		}
 		max_size_ = new_size;//then reassign the size to the new value
-
 	}
 
 	else if(max_size_ > new_size)
@@ -196,7 +195,6 @@ void Array::resize (size_t new_size)
 			data_[i] = hold[i];
 		}
 		max_size_ = new_size;//then reassign the size to the new value
-
 	}
 
 	else
