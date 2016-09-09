@@ -39,8 +39,8 @@ Array::Array (size_t length): data_(NULL), cur_size_(0), max_size_(length)
  */
 Array::Array (size_t length, char fill): data_(NULL), cur_size_(length), max_size_ (length)
 {
-	data_ = new char[length];
-	this->fill(fill);
+	data_ = new char[length];//create a new array
+	this->fill(fill);//and fill in the array with the character
 }
 
 /**
@@ -50,9 +50,9 @@ Array::Array (size_t length, char fill): data_(NULL), cur_size_(length), max_siz
  */
 Array::Array (const Array & array): data_(NULL), cur_size_(array.size()), max_size_(array.max_size())
 {
-	data_ = new char[max_size_];
-	for(int i = 0; i < cur_size_; i++)
-	{
+	data_ = new char[max_size_];//create a new character array
+	for(size_t i = 0; i < cur_size_; i++)
+	{//and copy the data in from the other array
 		data_[i] = array[i];
 	}
 }
@@ -72,12 +72,12 @@ Array::~Array (void)
  */
 const Array & Array::operator = (const Array & rhs)
 {
-	delete [] data_;
-	data_ = new char[rhs.max_size()];
-	cur_size_ = rhs.size();
+	delete [] data_; //delete the old data
+	data_ = new char[rhs.max_size()]; //allocate a new char array
+	cur_size_ = rhs.size();//set the sizes to their new values
 	max_size_ = rhs.max_size();
 	for(int i = 0; i < cur_size_; i++)
-	{
+	{//iterate through the array, copying the rhs
 		data_[i] = rhs[i];
 	}
 }
@@ -93,10 +93,10 @@ const Array & Array::operator = (const Array & rhs)
 char & Array::operator [] (size_t index)
 {
 	if(index > max_size_)
-	{
+	{//throw exception if out of range
 		throw std::out_of_range ("Index out of range");
 	}
-	return data_[index];
+	return data_[index];//return the character otherwise
 }
 
 /**
@@ -107,10 +107,10 @@ char & Array::operator [] (size_t index)
 const char & Array::operator [] (size_t index) const
 {
 	if(index > max_size_)
-	{
+	{//throw exception if out of range
 		throw std::out_of_range ("Index out of range");
 	}
-	return data_[index];
+	return data_[index];//return the character otherwise
 }
 
 /**
@@ -124,10 +124,10 @@ const char & Array::operator [] (size_t index) const
 char Array::get (size_t index) const
 {
 	if(index > max_size_)
-	{
+	{//throw exception if out of range
 		throw std::out_of_range ("Index out of range");
 	}	
-	return data_[index];
+	return data_[index];//return the character otherwise
 }
 
 /** 
@@ -142,14 +142,14 @@ char Array::get (size_t index) const
 void Array::set (size_t index, char value)
 {
 	if(index > max_size_)
-	{
+	{//throw exception if out of range
 		throw std::out_of_range ("Index out of range");
 	}
 	else
-	{
+	{//store the value
 		data_[index] = value;
 		if(cur_size_ < index)
-		{
+		{//readjust current size if necessary
 			cur_size_ = index;
 		}
 	}
@@ -170,29 +170,35 @@ void Array::set (size_t index, char value)
 void Array::resize (size_t new_size)
 {
 	if(max_size_ < new_size)
-	{
-		char* hold = data_;
-		data_ = new char[new_size];
+	{//the array will need to be expanded
+
+		char* hold = data_;//store the old data
+		data_ = new char[new_size];//make a new array
 		for(size_t i = 0; i < cur_size_; i++)
-		{
+		{//iterate through and copy the old array
 			data_[i] = hold[i];
 		}
-		max_size_ = new_size;
+		max_size_ = new_size;//then reassign the size to the new value
+
 	}
+
 	else if(max_size_ > new_size)
-	{
+	{//the array will need to be truncated
+		
 		if(cur_size_ > new_size)
-		{
+		{//if the array is truncated past the previous last char
 			cur_size_ = new_size;
 		}
-		char* hold = data_;
-		data_ = new char[new_size];
+		char* hold = data_;//store the old data
+		data_ = new char[new_size];//make a new array
 		for(size_t i = 0; i < cur_size_; i++)
-		{
+		{//iterate through and copy the old array
 			data_[i] = hold[i];
 		}
-		max_size_ = new_size;
+		max_size_ = new_size;//then reassign the size to the new value
+
 	}
+
 	else
 	{
 		return;
@@ -210,12 +216,13 @@ void Array::resize (size_t new_size)
  */
 int Array::find (char ch) const
 {
-	int current = static_cast<int>(cur_size_);
-	for(int i = 0; i < current; i++)
-	{
+	//cast the current size to an int for iteration
+	//int current = static_cast<int>(cur_size_);
+	for(size_t i = 0; i < cur_size_; i++)
+	{//iterate through the array
 		if(ch == data_[i])
-		{
-			return i;
+		{//and return the int value of the index if found
+			return static_cast<int>(i);
 		}
 	}
 	return -1;
@@ -236,12 +243,12 @@ int Array::find (char ch) const
  */
 int Array::find (char ch, size_t start) const
 {
-	int current = static_cast<int>(cur_size_);
-	for(int i = start; i < current; i++)
-	{
+	//int current = static_cast<int>(cur_size_);
+	for(size_t i = start; i < cur_size_; i++)
+	{//iterate through the array
 		if(ch == data_[i])
-		{
-			return i;
+		{//and return the int value of the index if found
+			return static_cast<int>(i);
 		}
 	}
 	return -1;
@@ -261,7 +268,7 @@ bool Array::operator == (const Array & rhs) const
 	{
 		return false;
 	}
-//	int current = static_cast<int>(cur_size_);
+
 	for(size_t i = 0; i < cur_size_; i++)
 	{
 		if(data_[i] != rhs.get(i))
@@ -290,7 +297,7 @@ bool Array::operator != (const Array & rhs) const
 	{
 		return true;
 	}
-//	int current = static_cast<int>(cur_size_);
+
 	for(size_t i = 0; i < cur_size_; i++)
 	{
 		if(data_[i] != rhs.get(i))
@@ -319,5 +326,7 @@ void Array::fill (char ch)
 		//...and add the character
 		data_[i] = ch;
 	}
+	//set the current size to the max size, because 
+	//the array has been filled
 	cur_size_ = max_size_;
 }

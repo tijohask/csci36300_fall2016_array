@@ -5,8 +5,8 @@
 
 /**
  * Returns the current size of the array.
- * In this case the current size is the size of the array 
- * from the beginning to the last assigned character
+ * In this case the current size is the "active" size of the array, 
+ * the part that has been readjusted by the user
  */
 inline
 size_t Array::size (void) const
