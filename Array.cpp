@@ -18,7 +18,7 @@ using namespace std;
 /// Default constructor.
 Array::Array (): data_(NULL), cur_size_(0), max_size_(0)
 {
-//	data_ = new char[0];
+
 }
 
 /**
@@ -26,9 +26,15 @@ Array::Array (): data_(NULL), cur_size_(0), max_size_(0)
  *
  * @param[in]      length        Initial size
  */
-Array::Array (size_t length): data_(NULL), cur_size_(0), max_size_(length)
+Array::Array (size_t length): data_(NULL), cur_size_(length), max_size_(length)
 {
-	data_ = new char[length];
+	// Ryan: Ensure length is not 0 here.
+	// Fix:
+	if(length > 0)
+	{
+		data_ = new char[length];
+		this->fill(' ');
+	}
 }
 
 /**
@@ -39,8 +45,13 @@ Array::Array (size_t length): data_(NULL), cur_size_(0), max_size_(length)
  */
 Array::Array (size_t length, char fill): data_(NULL), cur_size_(length), max_size_ (length)
 {
-	data_ = new char[length];//create a new array
-	this->fill(fill);//and fill in the array with the character
+	// Ryan: Ensure length is not 0 here.
+	// Fix: 
+	if(length > 0)
+	{
+		data_ = new char[length];//create a new array
+		this->fill(fill);//and fill in the array with the character
+	}
 }
 
 /**
@@ -50,6 +61,8 @@ Array::Array (size_t length, char fill): data_(NULL), cur_size_(length), max_siz
  */
 Array::Array (const Array & array): data_(NULL), cur_size_(array.size()), max_size_(array.max_size())
 {
+	// Ryan: Make sure that we are not allocating an array of size 0.
+	// Fix:
 	data_ = new char[max_size_];//create a new character array
 	for(size_t i = 0; i < cur_size_; i++)
 	{//and copy the data in from the other array
@@ -61,7 +74,12 @@ Array::Array (const Array & array): data_(NULL), cur_size_(array.size()), max_si
 /// Destructor
 Array::~Array (void)
 {
-	delete [] data_;
+	// Ryan: Check to make sure this is not NULL.
+	// Fix:
+	if(data_)
+	{
+		delete [] data_;
+	}
 }
 
 /**
@@ -72,6 +90,9 @@ Array::~Array (void)
  */
 const Array & Array::operator = (const Array & rhs)
 {
+	// Ryan: Check for self-assignment first.
+	// Fix:
+	
 	delete [] data_; //delete the old data
 	data_ = new char[rhs.max_size()]; //allocate a new char array
 	cur_size_ = rhs.size();//set the sizes to their new values
@@ -92,7 +113,7 @@ const Array & Array::operator = (const Array & rhs)
  */
 char & Array::operator [] (size_t index)
 {
-	if(index > max_size_)
+	if(index >= max_size_)
 	{//throw exception if out of range
 		throw std::out_of_range ("Index out of range");
 	}
@@ -106,7 +127,7 @@ char & Array::operator [] (size_t index)
  */
 const char & Array::operator [] (size_t index) const
 {
-	if(index > max_size_)
+	if(index >= max_size_)
 	{//throw exception if out of range
 		throw std::out_of_range ("Index out of range");
 	}
@@ -123,7 +144,7 @@ const char & Array::operator [] (size_t index) const
  */  
 char Array::get (size_t index) const
 {
-	if(index > max_size_)
+	if(index >= max_size_)
 	{//throw exception if out of range
 		throw std::out_of_range ("Index out of range");
 	}	
@@ -141,7 +162,7 @@ char Array::get (size_t index) const
  */
 void Array::set (size_t index, char value)
 {
-	if(index > max_size_)
+	if(index >= max_size_)
 	{//throw exception if out of range
 		throw std::out_of_range ("Index out of range");
 	}
@@ -174,11 +195,17 @@ void Array::resize (size_t new_size)
 
 		char* hold = data_;//store the old data
 		data_ = new char[new_size];//make a new array
+		max_size_ = new_size;//reassign the maximum size to the new value		
+		this->fill(' ');
+		//fill the array with blanks. the compiler doesn't like
+		//assigning uninitialized values
 		for(size_t i = 0; i < cur_size_; i++)
 		{//iterate through and copy the old array
 			data_[i] = hold[i];
 		}
-		max_size_ = new_size;//then reassign the size to the new value
+		delete [] hold;
+		//apparently this needs to be deleted.
+		//thought the compiler would do this when it went out of scope.
 	}
 
 	else if(max_size_ > new_size)
@@ -190,11 +217,17 @@ void Array::resize (size_t new_size)
 		}
 		char* hold = data_;//store the old data
 		data_ = new char[new_size];//make a new array
+		max_size_ = new_size;//reassign the maximum size to the new value		
+		this->fill(' ');
+		//fill the array with blanks. the compiler doesn't like
+		//assigning uninitialized values
 		for(size_t i = 0; i < cur_size_; i++)
 		{//iterate through and copy the old array
 			data_[i] = hold[i];
 		}
-		max_size_ = new_size;//then reassign the size to the new value
+		delete [] hold;
+		//apparently this needs to be deleted.
+		//thought the compiler would do this when it went out of scope.
 	}
 
 	else
@@ -214,8 +247,6 @@ void Array::resize (size_t new_size)
  */
 int Array::find (char ch) const
 {
-	//cast the current size to an int for iteration
-	//int current = static_cast<int>(cur_size_);
 	for(size_t i = 0; i < cur_size_; i++)
 	{//iterate through the array
 		if(ch == data_[i])
@@ -241,6 +272,8 @@ int Array::find (char ch) const
  */
 int Array::find (char ch, size_t start) const
 {
+	// Ryan: Why don't you use the other find function here - code reuse.
+	// Fix: 
 	//int current = static_cast<int>(cur_size_);
 	for(size_t i = start; i < cur_size_; i++)
 	{//iterate through the array
@@ -261,6 +294,7 @@ int Array::find (char ch, size_t start) const
  */
 bool Array::operator == (const Array & rhs) const
 {
+	// Ryan: Perform a self-comparison check first.
 	//if the arrays have different sizes, they are not equal
 	if(cur_size_ != rhs.size() || max_size_ != rhs.max_size())
 	{
@@ -290,6 +324,7 @@ bool Array::operator == (const Array & rhs) const
  */
 bool Array::operator != (const Array & rhs) const
 {
+	// Ryan: Why don't you just use the above function to achieve this - code reuse.
 	//if the arrays have different sizes, they are not equal	
 	if(cur_size_ != rhs.size() || max_size_ != rhs.max_size())
 	{
@@ -324,7 +359,4 @@ void Array::fill (char ch)
 		//...and add the character
 		data_[i] = ch;
 	}
-	//set the current size to the max size, because 
-	//the array has been filled
-	cur_size_ = max_size_;
 }
