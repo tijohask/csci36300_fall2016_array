@@ -7,7 +7,7 @@
 
 #include "Array.h"
 #include <stdexcept>
-using namespace std;
+//using namespace std;
 
 /**
  * @class Array
@@ -247,6 +247,9 @@ void Array::resize (size_t new_size)
  */
 int Array::find (char ch) const
 {
+	// Ryan: Why don't you use the other find function here - code reuse.
+	//cast the current size to an int for iteration
+	//int current = static_cast<int>(cur_size_);
 	for(size_t i = 0; i < cur_size_; i++)
 	{//iterate through the array
 		if(ch == data_[i])
