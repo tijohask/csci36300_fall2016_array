@@ -1,7 +1,7 @@
 #include "Array.h"
 #include <stdexcept>
 #include <iostream>
-using namespace std;
+//using namespace std;
 
 void print_out(Array arr);
 void test_constructors();
@@ -9,23 +9,67 @@ void test_set_and_get();
 void test_fill();
 void test_booleans();
 void test_out_of_bounds();
+void test_size();
 
 int main()
 {
-	cout << "Begin Testing" << endl;
+	std::cout << "Begin Testing" << std::endl;
  
 	test_constructors();
 	test_set_and_get();
 	test_fill();
+	test_size();
 	test_booleans();
 	test_out_of_bounds();	
 
-	cout << "Done" << endl;
+	std::cout << "Done" << std::endl;
+}
+
+void test_size()
+{
+	std::cout << "Testing sizes" << std::endl;
+
+	Array arr5 (9);
+	Array arr6 (4, 'l');
+	std::cout << arr5.size() << std::endl;
+	std::cout << arr5.max_size() << std::endl;
+
+	arr5.set(5, 'c');
+	print_out(arr5);
+	arr5.set(3, 'b');
+	print_out(arr5);
+	
+	std::cout << arr5.size() << std::endl;
+	std::cout << arr5.max_size() << std::endl;
+
+	arr5.resize(5);
+	print_out(arr5);
+
+	std::cout << arr5.size() << std::endl;
+	std::cout << arr5.max_size() << std::endl;
+	
+	print_out(arr6);
+	std::cout << arr6.size() << std::endl;
+	std::cout << arr6.max_size() << std::endl;
+
+	arr6.resize(6);
+	print_out(arr6);
+
+	std::cout << arr6.size() << std::endl;
+	std::cout << arr6.max_size() << std::endl;
+
+	arr6.set(4, 'L');
+	print_out(arr6);
+
+	std::cout << arr6.size() << std::endl;
+	std::cout << arr6.max_size() << std::endl;
+
+	std::cout << "Sizes Tested" << std::endl;
 }
 
 void test_constructors()
 {
-	cout << "Testing constructors" << endl;
+	std::cout << "Testing constructors" << std::endl;
 
 	Array arr1;
 	Array arr2 (9);
@@ -38,12 +82,12 @@ void test_constructors()
 	print_out(arr3);
 	print_out(arr4);
 
-	cout << "Testing constructors" << endl;
+	std::cout << "Testing constructors" << std::endl;
 }
 
 void test_set_and_get()
 {
-	cout << "Testing sets and gets" << endl;
+	std::cout << "Testing sets and gets" << std::endl;
 
 	Array arr3 (7, 'a');
 
@@ -54,17 +98,17 @@ void test_set_and_get()
 	arr3.set(4, 'e');
 	arr3.set(5, 'f');
 	print_out(arr3);
-	cout << arr3.get(5);
-	cout << arr3.get(4);
-	cout << arr3.get(3);
-	cout << endl;	
+	std::cout << arr3.get(5);
+	std::cout << arr3.get(4);
+	std::cout << arr3.get(3);
+	std::cout << std::endl;	
 
-	cout << "Sets and gets tested" << endl;
+	std::cout << "Sets and gets tested" << std::endl;
 }
 
 void test_fill()
 {
-	cout << "Testing fill" << endl;
+	std::cout << "Testing fill" << std::endl;
 
 	Array arrf (7);
 	print_out(arrf);
@@ -73,12 +117,12 @@ void test_fill()
 	arrf.fill('q');
 	print_out(arrf);
 	
-	cout << "Fill Tested" << endl;
+	std::cout << "Fill Tested" << std::endl;
 }
 
 void test_booleans()
 {
-	cout << "Testing booleans" << endl;
+	std::cout << "Testing booleans" << std::endl;
 
 	Array arr1;
 	Array arr2 (9, 'o');
@@ -91,38 +135,38 @@ void test_booleans()
 	print_out(arr4);
 	if(arr4 == arr2)
 	{
-		cout << "True 4-2" << endl;//expected
+		std::cout << "True 4-2" << std::endl;//expected
 	}
 	else
 	{
-		cout << "False 4-2" << endl;
+		std::cout << "False 4-2" << std::endl;
 	}
 	if(arr3 == arr2)
 	{
-		cout << "True 3-2" << endl;
+		std::cout << "True 3-2" << std::endl;
 	}
 	else
 	{
-		cout << "False 3-2" << endl;//expected
+		std::cout << "False 3-2" << std::endl;//expected
 	}
 	if(arr4 != arr1)
 	{
-		cout << "True 4-1" << endl;//expected
+		std::cout << "True 4-1" << std::endl;//expected
 	}
 	else
 	{
-		cout << "False 4-1" << endl;
+		std::cout << "False 4-1" << std::endl;
 	}
 	if(arr1 != arr2)
 	{
-		cout << "True 1-2" << endl;//expected
+		std::cout << "True 1-2" << std::endl;//expected
 	}
 	else
 	{
-		cout << "False 1-2" << endl;
+		std::cout << "False 1-2" << std::endl;
 	}
 
-	cout << "Booleans tested" << endl;
+	std::cout << "Booleans tested" << std::endl;
 }
 
 void test_out_of_bounds()
@@ -134,7 +178,7 @@ void test_out_of_bounds()
 	}
 	catch(std::out_of_range e)
 	{
-		cout << "Attempted out of bounds caught" << endl;
+		std::cout << "Attempted out of bounds caught" << std::endl;
 	}
 	try
 	{
@@ -142,7 +186,7 @@ void test_out_of_bounds()
 	}
 	catch(std::out_of_range e)
 	{
-		cout << "Attempted out of bounds caught" << endl;
+		std::cout << "Attempted out of bounds caught" << std::endl;
 	}
 	try
 	{
@@ -150,21 +194,19 @@ void test_out_of_bounds()
 	}
 	catch(std::out_of_range e)
 	{
-		cout << "Attempted out of bounds caught" << endl;
+		std::cout << "Attempted out of bounds caught" << std::endl;
 	}
 }
 
 void print_out(Array arr)
 {
-	cout << "\"";
-	for(int i = 0; i < arr.size(); i++)
+	std::cout << "\"";
+
+	for(int i = 0; i < arr.max_size(); i++)
 	{
-		cout << arr[i];
+		std::cout << arr[i];
 	}
-	for(int i = arr.size(); i < arr.max_size(); i++)
-	{
-		cout << " ";
-	}
-	cout << "\"";
-	cout << endl;	
+
+	std::cout << "\"";
+	std::cout << std::endl;
 }
