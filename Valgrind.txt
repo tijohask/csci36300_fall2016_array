@@ -1,21 +1,51 @@
-==4277== Memcheck, a memory error detector
-==4277== Copyright (C) 2002-2015, and GNU GPL'd, by Julian Seward et al.
-==4277== Using Valgrind-3.11.0 and LibVEX; rerun with -h for copyright info
-==4277== Command: ./array
-==4277== Parent PID: 3572
-==4277== 
-==4277== 
-==4277== HEAP SUMMARY:
-==4277==     in use at exit: 72,704 bytes in 1 blocks
-==4277==   total heap usage: 35 allocs, 34 frees, 74,509 bytes allocated
-==4277== 
-==4277== LEAK SUMMARY:
-==4277==    definitely lost: 0 bytes in 0 blocks
-==4277==    indirectly lost: 0 bytes in 0 blocks
-==4277==      possibly lost: 0 bytes in 0 blocks
-==4277==    still reachable: 72,704 bytes in 1 blocks
-==4277==         suppressed: 0 bytes in 0 blocks
-==4277== Rerun with --leak-check=full to see details of leaked memory
-==4277== 
-==4277== For counts of detected and suppressed errors, rerun with: -v
-==4277== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)
+==5052== Memcheck, a memory error detector
+==5052== Copyright (C) 2002-2015, and GNU GPL'd, by Julian Seward et al.
+==5052== Using Valgrind-3.11.0 and LibVEX; rerun with -h for copyright info
+==5052== Command: ./array
+==5052== Parent PID: 4506
+==5052== 
+==5052== Conditional jump or move depends on uninitialised value(s)
+==5052==    at 0x544B225: _IO_file_xsputn@@GLIBC_2.2.5 (fileops.c:1301)
+==5052==    by 0x54406FA: fwrite (iofwrite.c:39)
+==5052==    by 0x4F48EC5: std::basic_ostream<char, std::char_traits<char> >& std::__ostream_insert<char, std::char_traits<char> >(std::basic_ostream<char, std::char_traits<char> >&, char const*, long) (in /usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.21)
+==5052==    by 0x401A7F: print_out(Array) (in /home/timothy/Documents/ClassResources/SoftwareDesign/Assignments/Assignment1/csci36300_fall2016_array/array)
+==5052==    by 0x40222C: test_size() (in /home/timothy/Documents/ClassResources/SoftwareDesign/Assignments/Assignment1/csci36300_fall2016_array/array)
+==5052==    by 0x40329B: main (in /home/timothy/Documents/ClassResources/SoftwareDesign/Assignments/Assignment1/csci36300_fall2016_array/array)
+==5052== 
+==5052== Syscall param write(buf) points to uninitialised byte(s)
+==5052==    at 0x54C8A10: __write_nocancel (syscall-template.S:84)
+==5052==    by 0x544AB2E: _IO_file_write@@GLIBC_2.2.5 (fileops.c:1263)
+==5052==    by 0x544C338: new_do_write (fileops.c:518)
+==5052==    by 0x544C338: _IO_do_write@@GLIBC_2.2.5 (fileops.c:494)
+==5052==    by 0x544C74A: _IO_file_overflow@@GLIBC_2.2.5 (fileops.c:859)
+==5052==    by 0x5448472: putc (putc.c:29)
+==5052==    by 0x4F488FC: std::ostream::put(char) (in /usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.21)
+==5052==    by 0x401AEE: print_out(Array) (in /home/timothy/Documents/ClassResources/SoftwareDesign/Assignments/Assignment1/csci36300_fall2016_array/array)
+==5052==    by 0x40222C: test_size() (in /home/timothy/Documents/ClassResources/SoftwareDesign/Assignments/Assignment1/csci36300_fall2016_array/array)
+==5052==    by 0x40329B: main (in /home/timothy/Documents/ClassResources/SoftwareDesign/Assignments/Assignment1/csci36300_fall2016_array/array)
+==5052==  Address 0x5ab5c86 is 6 bytes inside a block of size 1,024 alloc'd
+==5052==    at 0x4C2DB8F: malloc (in /usr/lib/valgrind/vgpreload_memcheck-amd64-linux.so)
+==5052==    by 0x543F184: _IO_file_doallocate (filedoalloc.c:127)
+==5052==    by 0x544D4C3: _IO_doallocbuf (genops.c:398)
+==5052==    by 0x544C827: _IO_file_overflow@@GLIBC_2.2.5 (fileops.c:820)
+==5052==    by 0x544B1BC: _IO_file_xsputn@@GLIBC_2.2.5 (fileops.c:1331)
+==5052==    by 0x54406FA: fwrite (iofwrite.c:39)
+==5052==    by 0x4F48EC5: std::basic_ostream<char, std::char_traits<char> >& std::__ostream_insert<char, std::char_traits<char> >(std::basic_ostream<char, std::char_traits<char> >&, char const*, long) (in /usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.21)
+==5052==    by 0x40327F: main (in /home/timothy/Documents/ClassResources/SoftwareDesign/Assignments/Assignment1/csci36300_fall2016_array/array)
+==5052== 
+==5052== 
+==5052== HEAP SUMMARY:
+==5052==     in use at exit: 72,704 bytes in 1 blocks
+==5052==   total heap usage: 43 allocs, 42 frees, 74,566 bytes allocated
+==5052== 
+==5052== LEAK SUMMARY:
+==5052==    definitely lost: 0 bytes in 0 blocks
+==5052==    indirectly lost: 0 bytes in 0 blocks
+==5052==      possibly lost: 0 bytes in 0 blocks
+==5052==    still reachable: 72,704 bytes in 1 blocks
+==5052==         suppressed: 0 bytes in 0 blocks
+==5052== Rerun with --leak-check=full to see details of leaked memory
+==5052== 
+==5052== For counts of detected and suppressed errors, rerun with: -v
+==5052== Use --track-origins=yes to see where uninitialised values come from
+==5052== ERROR SUMMARY: 2 errors from 2 contexts (suppressed: 0 from 0)

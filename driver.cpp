@@ -1,7 +1,6 @@
 #include "Array.h"
 #include <stdexcept>
 #include <iostream>
-//using namespace std;
 
 void print_out(Array arr);
 void test_constructors();
@@ -30,7 +29,6 @@ void test_size()
 	std::cout << "Testing sizes" << std::endl;
 
 	Array arr5 (9);
-	Array arr6 (4, 'l');
 	std::cout << arr5.size() << std::endl;
 	std::cout << arr5.max_size() << std::endl;
 
@@ -48,21 +46,32 @@ void test_size()
 	std::cout << arr5.size() << std::endl;
 	std::cout << arr5.max_size() << std::endl;
 	
+	Array arr6 (4, 'l');
 	print_out(arr6);
 	std::cout << arr6.size() << std::endl;
 	std::cout << arr6.max_size() << std::endl;
 
 	arr6.resize(6);
-	print_out(arr6);
+//	print_out(arr6);
 
 	std::cout << arr6.size() << std::endl;
 	std::cout << arr6.max_size() << std::endl;
 
+	arr6.set(5, 'p');
 	arr6.set(4, 'L');
-	print_out(arr6);
+//	print_out(arr6);
+	
+	std::cout << arr6.get(3) << std::endl;
 
 	std::cout << arr6.size() << std::endl;
 	std::cout << arr6.max_size() << std::endl;
+	
+	arr6.fill('L');
+	print_out(arr6);
+	
+	std::cout << arr6.size() << std::endl;
+	std::cout << arr6.max_size() << std::endl;
+	
 
 	std::cout << "Sizes Tested" << std::endl;
 }
@@ -202,7 +211,7 @@ void print_out(Array arr)
 {
 	std::cout << "\"";
 
-	for(int i = 0; i < arr.max_size(); i++)
+	for(size_t i = 0; i < arr.max_size(); i++)
 	{
 		std::cout << arr[i];
 	}

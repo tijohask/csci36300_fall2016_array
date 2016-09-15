@@ -7,7 +7,6 @@
 
 #include "Array.h"
 #include <stdexcept>
-//using namespace std;
 
 /**
  * @class Array
@@ -23,13 +22,11 @@ Array::Array (): data_(NULL), cur_size_(0), max_size_(0)
 
 /**
  * Initializing constructor.
- *
- * @param[in]      length        Initial size
  */
 Array::Array (size_t length): data_(NULL), cur_size_(length), max_size_(length)
 {
 	// Ryan: Ensure length is not 0 here.
-	// Fix:
+	// Fix: Added if statement to make sure length is greater than 0
 	if(length > 0)
 	{
 		data_ = new char[length];
@@ -39,14 +36,11 @@ Array::Array (size_t length): data_(NULL), cur_size_(length), max_size_(length)
 
 /**
  * Initializing constructor.
- *
- * @param[in]      length        Initial size
- * @param[in]      fill          Initial value for each element
  */
 Array::Array (size_t length, char fill): data_(NULL), cur_size_(length), max_size_ (length)
 {
 	// Ryan: Ensure length is not 0 here.
-	// Fix: 
+	// Fix: Added if statement to make sure length is greater than 0
 	if(length > 0)
 	{
 		data_ = new char[length];//create a new array
@@ -56,17 +50,18 @@ Array::Array (size_t length, char fill): data_(NULL), cur_size_(length), max_siz
 
 /**
  * Copy constructor
- *
- * @param[in]     arr         The source array.
  */
 Array::Array (const Array & array): data_(NULL), cur_size_(array.size()), max_size_(array.max_size())
 {
 	// Ryan: Make sure that we are not allocating an array of size 0.
-	// Fix:
-	data_ = new char[max_size_];//create a new character array
-	for(size_t i = 0; i < cur_size_; i++)
-	{//and copy the data in from the other array
-		data_[i] = array[i];
+	// Fix: Added if statement to make sure we are not allocating an array of size 0
+	if(max_size_ > 0)
+	{
+		data_ = new char[max_size_];//create a new character array
+		for(size_t i = 0; i < cur_size_; i++)
+		{//and copy the data in from the other array
+			data_[i] = array[i];
+		}
 	}
 }
 
@@ -75,8 +70,8 @@ Array::Array (const Array & array): data_(NULL), cur_size_(array.size()), max_si
 Array::~Array (void)
 {
 	// Ryan: Check to make sure this is not NULL.
-	// Fix:
-	if(data_)
+	// Fix: Added if statement to make sure data is not NULL
+	if(data_ != NULL)
 	{
 		delete [] data_;
 	}
@@ -84,22 +79,29 @@ Array::~Array (void)
 
 /**
  * Assignment operation
- *
- * @param[in]       rhs      Right-hand side of equal sign
- * @return          Reference to self
  */
 const Array & Array::operator = (const Array & rhs)
 {
 	// Ryan: Check for self-assignment first.
-	// Fix:
+	// Fix: Added if statement to check for self assignment
+
+	//(this != &rhs) compares the addresses. 
+    //If the object is being assigned to itself, its caught and nothing happens
 	
-	delete [] data_; //delete the old data
-	data_ = new char[rhs.max_size()]; //allocate a new char array
-	cur_size_ = rhs.size();//set the sizes to their new values
-	max_size_ = rhs.max_size();
-	for(int i = 0; i < cur_size_; i++)
-	{//iterate through the array, copying the rhs
-		data_[i] = rhs[i];
+	//(*this != rhs) compares the actual objects.
+	//It'll save time if many identical arrays are being compared to each other,
+	//but it'll waste time if the majority of arrays are not similar
+	
+	if(this != &rhs) //possibly (*this != rhs) ???
+	{
+		delete [] data_; //delete the old data
+		data_ = new char[rhs.max_size()]; //allocate a new char array
+		cur_size_ = rhs.size();//set the sizes to their new values
+		max_size_ = rhs.max_size();
+		for(int i = 0; i < cur_size_; i++)
+		{//iterate through the array, copying the rhs
+			data_[i] = rhs[i];
+		}
 	}
 }
 
@@ -107,9 +109,6 @@ const Array & Array::operator = (const Array & rhs)
  * Get the character at the specified index. If the index is not
  * within the range of the array, then std::out_of_range exception
  * is thrown.
- *
- * @param[in]       index               Zero-based location
- * @exception       std::out_of_range   Invalid \a index value
  */
 char & Array::operator [] (size_t index)
 {
@@ -121,8 +120,6 @@ char & Array::operator [] (size_t index)
 }
 
 /**
- * @overload
- *
  * The returned character is not modifiable.
  */
 const char & Array::operator [] (size_t index) const
@@ -137,10 +134,6 @@ const char & Array::operator [] (size_t index) const
 /**
  * Get the character at the specified index. If the \a index is not within
  * the range of the array, then std::out_of_range exception is thrown.
- *
- * @param[in]       index                 Zero-based location
- * @return          Character at \index
- * @exception       std::out_of_range     Invalid index value
  */  
 char Array::get (size_t index) const
 {
@@ -155,10 +148,6 @@ char Array::get (size_t index) const
  * Set the character at the specified \a index. If the \a index is not
  * within range of the array, then std::out_of_range exception is 
  * thrown.
- *
- * @param[in]       index                 Zero-based location
- * @param[in]       value                 New value for character
- * @exception       std::out_of_range     Invalid \a index value
  */
 void Array::set (size_t index, char value)
 {
@@ -166,14 +155,13 @@ void Array::set (size_t index, char value)
 	{//throw exception if out of range
 		throw std::out_of_range ("Index out of range");
 	}
-	else
-	{//store the value
-		data_[index] = value;
-		if(cur_size_ < index)
-		{//readjust current size if necessary
-			cur_size_ = index;
-		}
+	//store the value otherwise	
+	data_[index] = value;
+	if(cur_size_ < index)
+	{//readjust current size if necessary
+		cur_size_ = index;
 	}
+
 }
 
 /**
@@ -185,8 +173,6 @@ void Array::set (size_t index, char value)
  *
  * The array's original contents are preserved regardless of whether the 
  * array's size is either increased or decreased.
- *
- * @param[in]       new_size              New size of the array
  */
 void Array::resize (size_t new_size)
 {
@@ -240,44 +226,26 @@ void Array::resize (size_t new_size)
  * Locate the specified character in the array. The index of the first
  * occurrence of the character is returned. If the character is not
  * found in the array, then -1 is returned.
- *
- * @param[in]        ch        Character to search for
- * @return           Index value of the character
- * @retval           -1        Character not found
  */
 int Array::find (char ch) const
 {
 	// Ryan: Why don't you use the other find function here - code reuse.
-	//cast the current size to an int for iteration
-	//int current = static_cast<int>(cur_size_);
-	for(size_t i = 0; i < cur_size_; i++)
-	{//iterate through the array
-		if(ch == data_[i])
-		{//and return the int value of the index if found
-			return static_cast<int>(i);
-		}
-	}
-	return -1;
+	// Fix: using other function as advised.
+	return this->find(ch, 0);
 }
 
 /**
- * @overload
- *
  * This version allows you to specify the start index of the search. If
  * the start index is not within the range of the array, then the
  * std::out_of_range exception is thrown.
- *
- * @param[in]       ch                   Character to search for
- * @param[in]       start                Index to begin search
- * @return          Index value of first occurrence
- * @retval          -1                   Character not found
- * @exception       std::out_of_range    Invalid index
  */
 int Array::find (char ch, size_t start) const
 {
-	// Ryan: Why don't you use the other find function here - code reuse.
-	// Fix: 
-	//int current = static_cast<int>(cur_size_);
+	if(start >= max_size_)
+	{//throw exception if out of range
+		throw std::out_of_range ("Index out of range");
+	}
+
 	for(size_t i = start; i < cur_size_; i++)
 	{//iterate through the array
 		if(ch == data_[i])
@@ -290,17 +258,20 @@ int Array::find (char ch, size_t start) const
 
 /**
  * Test the array for equality.
- *
- * @param[in]       rhs                  Right hand side of equal to sign
- * @retval          true                 Left side is equal to right side
- * @retval          false                Left side is not equal to right side
  */
 bool Array::operator == (const Array & rhs) const
 {
 	// Ryan: Perform a self-comparison check first.
+	// Fix: Added pointer comparison
 	//if the arrays have different sizes, they are not equal
+	
+	if(this == &rhs)
+	{//Pointer comparison
+		return true;
+	}
+	
 	if(cur_size_ != rhs.size() || max_size_ != rhs.max_size())
-	{
+	{//If the arrays have different sizes, they are not equal
 		return false;
 	}
 
@@ -320,46 +291,27 @@ bool Array::operator == (const Array & rhs) const
 
 /**
  * Test the array for inequality.
- *
- * @param[in]       rhs                  Right-hand size of not equal to sign
- * @retval          true                 Left side is not equal to right side
- * @retval          false                Left size is equal to right side
  */
 bool Array::operator != (const Array & rhs) const
 {
 	// Ryan: Why don't you just use the above function to achieve this - code reuse.
-	//if the arrays have different sizes, they are not equal	
-	if(cur_size_ != rhs.size() || max_size_ != rhs.max_size())
-	{
-		return true;
-	}
+	// Fix: using the above function as advised.
+	//if the arrays have different sizes, they are not equal
 
-	for(size_t i = 0; i < cur_size_; i++)
-	{
-		if(data_[i] != rhs.get(i))
-		{
-			//if the arrays have different characters,
-			//they are not equal
-			return true;
-		}
-	}
-	//if the arrays are the same size with the same characters,
-	//they are equal
-	return false;
+	return !(*this == rhs);
+	//      (this == &rhs)
 }
 
 
 /**
- * Fill the contents of the array.
- *
- * @param[in]       ch                   Fill character
+ * Fill the contents of the array with the provided character
  */
 void Array::fill (char ch)
 {
-	//iterate through every character in the array...
+	//iterate through every character in the array
 	for(size_t i = 0; i < max_size_; i++)
 	{
-		//...and add the character
+		//and add the character
 		data_[i] = ch;
 	}
 }
