@@ -23,6 +23,7 @@ Array::Array (): data_(NULL), cur_size_(0), max_size_(0)
 /**
  * Initializing constructor.
  */
+//Takes in a length
 Array::Array (size_t length): data_(NULL), cur_size_(length), max_size_(length)
 {
 	// Ryan: Ensure length is not 0 here.
@@ -37,6 +38,7 @@ Array::Array (size_t length): data_(NULL), cur_size_(length), max_size_(length)
 /**
  * Initializing constructor.
  */
+//Takes in a length, and a character to fill in the array with
 Array::Array (size_t length, char fill): data_(NULL), cur_size_(length), max_size_ (length)
 {
 	// Ryan: Ensure length is not 0 here.
@@ -51,10 +53,12 @@ Array::Array (size_t length, char fill): data_(NULL), cur_size_(length), max_siz
 /**
  * Copy constructor
  */
+//Takes in another array object
 Array::Array (const Array & array): data_(NULL), cur_size_(array.size()), max_size_(array.max_size())
 {
 	// Ryan: Make sure that we are not allocating an array of size 0.
-	// Fix: Added if statement to make sure we are not allocating an array of size 0
+	// Fix: Added if statement to make sure we are not allocating an 
+	// array of size 0
 	if(max_size_ > 0)
 	{
 		data_ = new char[max_size_];//create a new character array
@@ -65,14 +69,13 @@ Array::Array (const Array & array): data_(NULL), cur_size_(array.size()), max_si
 	}
 }
 
-//All constructors appear to be working
 /// Destructor
 Array::~Array (void)
 {
 	// Ryan: Check to make sure this is not NULL.
 	// Fix: Added if statement to make sure data is not NULL
 	if(data_ != NULL)
-	{
+	{//make sure the data is pointing to something
 		delete [] data_;
 	}
 }
@@ -86,14 +89,15 @@ const Array & Array::operator = (const Array & rhs)
 	// Fix: Added if statement to check for self assignment
 
 	//(this != &rhs) compares the addresses. 
-    //If the object is being assigned to itself, its caught and nothing happens
+	//If the object is being assigned to itself, its caught and nothing happens
 	
 	//(*this != rhs) compares the actual objects.
-	//It'll save time if many identical arrays are being compared to each other,
-	//but it'll waste time if the majority of arrays are not similar
+	//It'll save time if many identical arrays are being compared to 
+	//each other, but it'll waste time if the majority of arrays are not
+	//similar
 	
-	if(this != &rhs) //possibly (*this != rhs) ???
-	{
+	if(this != &rhs)
+	{//compare the addresses. if they're the same, nothing needs to be done
 		delete [] data_; //delete the old data
 		data_ = new char[rhs.max_size()]; //allocate a new char array
 		cur_size_ = rhs.size();//set the sizes to their new values
@@ -109,6 +113,8 @@ const Array & Array::operator = (const Array & rhs)
  * Get the character at the specified index. If the index is not
  * within the range of the array, then std::out_of_range exception
  * is thrown.
+ *
+ * Used as arr[index]
  */
 char & Array::operator [] (size_t index)
 {
@@ -181,7 +187,7 @@ void Array::resize (size_t new_size)
 
 		char* hold = data_;//store the old data
 		data_ = new char[new_size];//make a new array
-		max_size_ = new_size;//reassign the maximum size to the new value		
+		max_size_ = new_size;//reassign the maximum size to the new value
 		this->fill(' ');
 		//fill the array with blanks. the compiler doesn't like
 		//assigning uninitialized values
@@ -203,7 +209,7 @@ void Array::resize (size_t new_size)
 		}
 		char* hold = data_;//store the old data
 		data_ = new char[new_size];//make a new array
-		max_size_ = new_size;//reassign the maximum size to the new value		
+		max_size_ = new_size;//reassign the maximum size to the new value
 		this->fill(' ');
 		//fill the array with blanks. the compiler doesn't like
 		//assigning uninitialized values
@@ -217,7 +223,7 @@ void Array::resize (size_t new_size)
 	}
 
 	else
-	{
+	{//nothing needs to be done
 		return;
 	}
 }
@@ -263,8 +269,7 @@ bool Array::operator == (const Array & rhs) const
 {
 	// Ryan: Perform a self-comparison check first.
 	// Fix: Added pointer comparison
-	//if the arrays have different sizes, they are not equal
-	
+
 	if(this == &rhs)
 	{//Pointer comparison
 		return true;
@@ -299,7 +304,6 @@ bool Array::operator != (const Array & rhs) const
 	//if the arrays have different sizes, they are not equal
 
 	return !(*this == rhs);
-	//      (this == &rhs)
 }
 
 

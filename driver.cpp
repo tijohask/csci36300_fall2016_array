@@ -67,7 +67,7 @@ void test_size()
 	std::cout << arr6.max_size() << std::endl;
 	
 	arr6.fill('L');
-	print_out(arr6);
+//	print_out(arr6);
 	
 	std::cout << arr6.size() << std::endl;
 	std::cout << arr6.max_size() << std::endl;
