@@ -1,0 +1,5 @@
+#!/bin/bash
+make -f Makefile.Array
+valgrind --tool=memcheck --log-file=Valgrind.txt ./array
+sleep 4
+cat Valgrind.txt
